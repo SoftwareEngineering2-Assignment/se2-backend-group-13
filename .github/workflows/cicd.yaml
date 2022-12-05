@@ -2,6 +2,14 @@ name: ci
 
 on: push
 
+env:
+   PORT: 3000
+   SERVER_SECRET=${{secrets.SERVER_SECRET}}
+   MONGODB_URI=${{secrets.MONGODB_URI}}
+   PLATFORM_URI= http://localhost:3002
+   SERVER_URI= http://localhost:3000
+   SERVER_EMAIL= karanikio@auth.gr
+   SENDGRID_API_KEY=${{secrets.SENDGRID_API_KEY}}
 jobs:
    ci:
     runs-on: ubuntu-latest
@@ -24,7 +32,7 @@ jobs:
             password: ${{ secrets.SSH_PASSWORD}}
             port: ${{ secrets.SSH_PORT}}
             script: |
-               cd ~/SoftwareEngineering2-Assignment/se2-backend-group-13
+               cd ~/se2/13/se2-backend
                git reset --hard origin/main
                git pull https://${{ secrets.CLONE_TOKEN}}@github.com/SoftwareEngineering2-Assignment/se2-backend-group-13
                bash -ci 'npm install'
