@@ -22,20 +22,20 @@ jobs:
         run: npm install
       - name: Run test
         run: npm test
-   cd: 
-      runs-on: ubuntu-latest
-      needs: ci
-      if: github.ref == 'refs/heads/main'
-      steps:
-         - uses: appleboy/ssh-action@master
-           with:  
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USERNAME}}
-            password: ${{ secrets.SSH_PASSWORD}}
-            port: ${{ secrets.SSH_PORT}}
-            script: |
-               cd ~/se2/13/se2-backend
-               git reset --hard origin/main
-               git pull https://github.com/SoftwareEngineering2-Assignment/se2-backend-group-13
-               bash -ci 'npm install'
-               bash -ci 'pm2 restart se2-backend'
+#    cd: 
+#       runs-on: ubuntu-latest
+#       needs: ci
+#       if: github.ref == 'refs/heads/main'
+#       steps:
+#          - uses: appleboy/ssh-action@master
+#            with:  
+#             host: ${{ secrets.SSH_HOST }}
+#             username: ${{ secrets.SSH_USERNAME}}
+#             password: ${{ secrets.SSH_PASSWORD}}
+#             port: ${{ secrets.SSH_PORT}}
+#             script: |
+#                cd ~/se2/13/se2-backend
+#                git reset --hard origin/main
+#                git pull https://github.com/SoftwareEngineering2-Assignment/se2-backend-group-13
+#                bash -ci 'npm install'
+#                bash -ci 'pm2 restart se2-backend'
