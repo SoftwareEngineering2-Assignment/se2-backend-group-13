@@ -106,3 +106,4 @@ dist
 
 # Uploads
 src/assets/uploads/
+.env
