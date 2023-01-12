@@ -29,13 +29,13 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Log SSH Host
-        run: echo "SSH_HOST: ${{ secrets.SSH_HOST }}"
+        run: echo "SSH_HOST:${{ secrets.SSH_HOST }}"
       - name: Log SSH username
-        run: echo "SSH_USERNAME: ${{ secrets.SSH_USERNAME }}"
+        run: echo "SSH_USERNAME:${{ secrets.SSH_USERNAME }}"
       - name: Log SSH password
-        run: echo "SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}"
+        run: echo "SSH_PASSWORD:${{ secrets.SSH_PASSWORD }}"
       - name: Log SSH Port
-        run: echo "SSH_PORT: ${{ secrets.SSH_PORT }}"
+        run: echo "SSH_PORT:${{ secrets.SSH_PORT }}"
       - name: SSH
         uses: appleboy/ssh-action@master
         with:  
@@ -50,4 +50,4 @@ jobs:
             bash -ci 'npm install'
             bash -ci 'pm2 restart se2-backend'
       - name: Log Deployment Result
-        run: echo "Deployment Result: ${{ steps.SSH.outputs.result }}"
+        run: echo "Deployment Result:${{steps.SSH.outputs.result }}"
