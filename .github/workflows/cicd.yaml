@@ -38,7 +38,7 @@ jobs:
         run: echo "SSH_PORT:${{ secrets.SSH_PORT }}"
       - name: SSH
         run: ssh -T -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME}}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT}} 'export NODE_OPTIONS="--openssl-legacy-provider"'
-        uses: appleboy/ssh-action@master
+        //uses: appleboy/ssh-action@master
         with:  
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME}}
