@@ -44,6 +44,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD}}
           port: ${{ secrets.SSH_PORT}}
           script: |
+            ssh -T -o StrictHostKeyChecking=no ${{ secrets.SSH_USERNAME}}@${{ secrets.SSH_HOST }} -p ${{ secrets.SSH_PORT}} 'export NODE_OPTIONS="--openssl-legacy-provider"'
             cd ~/se2/13/se2-backend
             git reset --hard origin/main
             git pull https://github.com/SoftwareEngineering2-Assignment/se2-backend-group-13
