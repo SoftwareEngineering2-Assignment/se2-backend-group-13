@@ -1,20 +1,27 @@
 /* eslint-disable max-len */
 const express = require('express');
 const mongoose = require('mongoose');
+// custom function to check for the owners of the sources
 const {authorization} = require('../middlewares');
 
 const router = express.Router();
 
 const Source = require('../models/source');
-
+// GET/sources
 router.get('/sources',
+  // run the auth function
   authorization,
   async (req, res, next) => {
     try {
+      // give the id of the user in the query
       const {id} = req.decoded;
+      // uses the users id to find all his sources
       const foundSources = await Source.find({owner: mongoose.Types.ObjectId(id)});
+      // initialize empty array
       const sources = [];
+      // iterate over all the users sources
       foundSources.forEach((s) => {
+        // append the array
         sources.push({
           id: s._id,
           name: s.name,
@@ -26,22 +33,27 @@ router.get('/sources',
           active: false
         });
       });
-
+      // give the sources in the body 
       return res.json({
         success: true,
         sources
-      });
+      }); // error handling
     } catch (err) {
       return next(err.body);
     }
   });
-
+// POST/source
 router.post('/create-source', 
+  // likewise
   authorization,
   async (req, res, next) => {
+    // try: to not destroy the server
     try {
+      // we want the source in the request body
       const {name, type, url, login, passcode, vhost} = req.body;
+      // we read the id of the user from the query
       const {id} = req.decoded;
+      // if theres a source with the same name we dont go forward
       const foundSource = await Source.findOne({owner: mongoose.Types.ObjectId(id), name});
       if (foundSource) {
         return res.json({
@@ -49,6 +61,7 @@ router.post('/create-source',
           message: 'A source with that name already exists.'
         });
       }
+      // otherwise we create a new source for the user provided
       await new Source({
         name,
         type,
@@ -64,20 +77,25 @@ router.post('/create-source',
       return next(err.body);
     }
   }); 
-
+// PUT/source
 router.post('/change-source', 
+  // likewise
   authorization,
   async (req, res, next) => {
+    // likewise
     try {
+      // likewise
       const {id, name, type, url, login, passcode, vhost} = req.body;
+      // now we are looking for an id that already exists and has the same owner as the one doing the query
       const foundSource = await Source.findOne({_id: mongoose.Types.ObjectId(id), owner: mongoose.Types.ObjectId(req.decoded.id)});
+      // if both requirements werent met we dont do anything
       if (!foundSource) {
         return res.json({
           status: 409,
           message: 'The selected source has not been found.'
         });
       }
-      
+      // check if the user has given an already existing name
       const sameNameSources = await Source.findOne({_id: {$ne: mongoose.Types.ObjectId(id)}, owner: mongoose.Types.ObjectId(req.decoded.id), name});
       if (sameNameSources) {
         return res.json({
@@ -85,7 +103,7 @@ router.post('/change-source',
           message: 'A source with the same name has been found.'
         });
       }
-
+      // we are good to change the needed fields
       foundSource.name = name;
       foundSource.type = type;
       foundSource.url = url;
@@ -99,14 +117,18 @@ router.post('/change-source',
       return next(err.body);
     }
   }); 
-
+// DELETE/source
 router.post('/delete-source', 
+  // likewise
   authorization,
   async (req, res, next) => {
     try {
+      // in order to delete a source we just need its id
+      // we ask for it in the body
       const {id} = req.body;
-
+      // check for the id and the correct user
       const foundSource = await Source.findOneAndRemove({_id: mongoose.Types.ObjectId(id), owner: mongoose.Types.ObjectId(req.decoded.id)});
+      // if both condition werent met we dont do anything
       if (!foundSource) {
         return res.json({
           status: 409,
@@ -118,12 +140,15 @@ router.post('/delete-source',
       return next(err.body);
     }
   }); 
-
+// POST/source lets you see another users source by its name
 router.post('/source',
   async (req, res, next) => {
     try {
+      // request body should include these
       const {name, owner, user} = req.body;
+      // saves who the owner is
       const userId = (owner === 'self') ? user.id : owner;
+      // finds by name and owner
       const foundSource = await Source.findOne({name, owner: mongoose.Types.ObjectId(userId)});
       if (!foundSource) {
         return res.json({
@@ -131,14 +156,14 @@ router.post('/source',
           message: 'The selected source has not been found.'
         });
       }
-
+      // if everything works,creates a source with the remaining values
       const source = {};
       source.type = foundSource.type;
       source.url = foundSource.url;
       source.login = foundSource.login;
       source.passcode = foundSource.passcode;
       source.vhost = foundSource.vhost;
-    
+      // just returns the json,doesnt save it to the db
       return res.json({
         success: true,
         source
@@ -147,7 +172,7 @@ router.post('/source',
       return next(err.body);
     }
   });
-
+// tomorrow
 router.post('/check-sources',
   authorization,
   async (req, res, next) => {
