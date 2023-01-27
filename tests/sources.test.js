@@ -6,13 +6,13 @@ const http = require('node:http');
 const test = require('ava').default;
 const got = require('got');
 const listen = require('test-listen');
-const { string } = require('yup');
 const app = require('../src/index');
 const {jwtSign} = require('../src/utilities/authentication/helpers');
 // initialize my token to use in the tests
-const token = jwtSign({id: '63bdd8ed050a9611142d34c4'});
+const myid = '63bdd8ed050a9611142d34c4';
+const token = jwtSign({id: myid});
 // also use a dummy user
-const dummytoken = jwtSign({id: '63cda377d498040594c753b9'});
+// const dummytoken = jwtSign({id: '63cda377d498040594c753b9'});
 // before each , opens the server
 test.before(async (t) => {
   t.context.server = http.createServer(app);
@@ -162,4 +162,36 @@ test('POST /source doesnt see another users source', async (t) => {
   t.is(statusCode, 200);
   t.is(body.status, 409);
 });
-// just check sources left :)
+// check-sources function
+test(' POST /check-sources ', async (t) => {
+  // body of the request we give names inside a json
+  const source123 = {sources: ['zero', 'dracula', 'animal']};
+  // do the post with my token
+  const {statusCode, body} = await t.context.got.post(`sources/check-sources?token=${token}`, {json: source123});
+  // test should pass
+  t.is(statusCode, 200);
+  // the user doesnt own the 2 first so we now has his copies
+  t.is(body.newSources[0], source123.sources[0]);
+  t.is(body.newSources[1], source123.sources[1]);
+  // we are expecting 2
+  t.is(body.newSources.length, 2);
+});
+// quickly delete the 2 new sources from the previous test
+test('DELETE /delete-source delete the last 2 sources ', async (t) => {
+  // we need 2 ids
+  const {body: b1} = await t.context.got(`sources/sources?token=${token}`);
+  const delid1 = b1.sources[1].id;
+  const delid2 = b1.sources[2].id;
+  // create a json for each of the sources we want to delete
+  const delSource1 = {id: delid1};
+  const delSource2 = {id: delid2};
+  // do the query with the correct body each time
+  const {statusCode: sc1, body: b2} = await t.context.got.post(`sources/delete-source?token=${token}`, {json: delSource1});
+  const {statusCode: sc2, body: b3} = await t.context.got.post(`sources/delete-source?token=${token}`, {json: delSource2});
+  // sC is 200
+  t.is(sc1, 200);
+  t.is(sc2, 200);
+  // the body that is returned is just a success
+  t.assert(b2.success);
+  t.assert(b3.success);
+});

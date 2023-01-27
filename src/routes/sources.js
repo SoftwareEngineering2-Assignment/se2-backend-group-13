@@ -177,32 +177,39 @@ router.post('/check-sources',
   authorization,
   async (req, res, next) => {
     try {
+      // provide a json in body with sources names
       const {sources} = req.body;
+      // token in path
       const {id} = req.decoded;
-
+      // initialize what we will return
       const newSources = [];
-
+      // iterate over the number of values inside the body
       for (let i = 0; i < sources.length; i += 1) {
+        //  find using the given name or the id of the user commiting the query
         // eslint-disable-next-line no-await-in-loop
         const result = await Source.findOne({name: sources[i], owner: mongoose.Types.ObjectId(id)});
+        // if the user doesnt own a source, add it
         if (!result) {
           newSources.push(sources[i]);
         }
       }
-
+      // save to the db the sources the users doesnt own
       for (let i = 0; i < newSources.length; i += 1) {
         // eslint-disable-next-line no-await-in-loop
         await new Source({
+          // the new source has just name and type:stomp
           name: newSources[i],
           type: 'stomp',
+          // rest are blank
           url: '',
           login: '',
           passcode: '',
           vhost: '',
+          // the user doing the query is the owner of the new sources
           owner: mongoose.Types.ObjectId(id)
         }).save();
       } 
-      
+      // return the json to the user
       return res.json({
         success: true,
         newSources
