@@ -28,18 +28,7 @@ jobs:
     needs: ci
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Log SSH Host
-        run: echo "SSH_HOST:${{ secrets.SSH_HOST }}"
-      - name: Log SSH username
-        run: echo "SSH_USERNAME:${{ secrets.SSH_USERNAME }}"
-      - name: Log SSH password
-        run: echo "SSH_PASSWORD:${{ secrets.SSH_PASSWORD }}"
-      - name: Log SSH Port
-        run: echo "SSH_PORT:${{ secrets.SSH_PORT }}"
-      - name: SSH
-        env:
-          NODE_OPTIONS: "--openssl-legacy-provider"
-        uses: appleboy/ssh-action@master
+      - uses: appleboy/ssh-action@master
         with:  
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME}}
@@ -51,5 +40,3 @@ jobs:
             git pull https://github.com/SoftwareEngineering2-Assignment/se2-backend-group-13
             bash -ci 'npm install'
             bash -ci 'pm2 restart se2-backend'
-      - name: Log Deployment Result
-        run: echo "Deployment Result:${{steps.SSH.outputs.result }}"
