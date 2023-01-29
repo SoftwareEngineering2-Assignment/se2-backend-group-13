@@ -135,40 +135,44 @@ router.post('/save-dashboard',
       // search for the dashboard
       const result = await Dashboard.findOneAndUpdate({_id: mongoose.Types.ObjectId(id), owner: mongoose.Types.ObjectId(req.decoded.id)}, {
         $set: {
+          // change these variables
           layout,
           items,
           nextId
         }
       }, {new: true});
-
+      // check if we found a dashboard by id
       if (result === null) {
         return res.json({
           status: 409,
           message: 'The selected dashboard has not been found.'
         });
       }
+      // return success to the user if we succeeded
       return res.json({success: true});
     } catch (err) {
       return next(err.body);
     }
   }); 
-
+// clone dashboard
 router.post('/clone-dashboard', 
   authorization,
   async (req, res, next) => {
     try {
+      // dashboard's ID and the new name in body
       const {dashboardId, name} = req.body;
-
+      // find users dashboard with that name
       const foundDashboard = await Dashboard.findOne({owner: mongoose.Types.ObjectId(req.decoded.id), name});
+      // if the name is a duplicate we return 409
       if (foundDashboard) {
         return res.json({
           status: 409,
           message: 'A dashboard with that name already exists.'
         });
       }
-
+      // if the name is not a duplicate we find the dashboard with that id
       const oldDashboard = await Dashboard.findOne({_id: mongoose.Types.ObjectId(dashboardId), owner: mongoose.Types.ObjectId(req.decoded.id)});
-      
+      // create a duplicate dashboard but with different name
       await new Dashboard({
         name,
         layout: oldDashboard.layout,
@@ -186,9 +190,11 @@ router.post('/clone-dashboard',
 router.post('/check-password-needed', 
   async (req, res, next) => {
     try {
+      // user and dashboardId in body
       const {user, dashboardId} = req.body;
+      // user input must have id value
       const userId = user.id;
-
+      // find using dashboardId
       const foundDashboard = await Dashboard.findOne({_id: mongoose.Types.ObjectId(dashboardId)}).select('+password');
       if (!foundDashboard) {
         return res.json({
@@ -196,7 +202,7 @@ router.post('/check-password-needed',
           message: 'The specified dashboard has not been found.'
         });
       }
-
+      // checks something i will do tomorrow
       const dashboard = {};
       dashboard.name = foundDashboard.name;
       dashboard.layout = foundDashboard.layout;

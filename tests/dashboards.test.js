@@ -113,21 +113,99 @@ test('GET /dashboard get sources in a non existing dashboard', async (t) => {
   t.is(body.status, 409);
 });
 
-// // update users dashboard
-// test('POST /save-dashboard update users dashboard', async (t) => {
-//   // create a new dashboard to update
-//   // give name in body
-//   const newboard = {name: 'flamingo'};
-//   // just give the token in query
-//   const {body:b1, statusCode: sc1} = await t.context.got.post(`dashboards/create-dashboard?token=${token}`, {json: newboard});
-//   t.is(sc1, 200);
+// update users dashboard
+test('POST /save-dashboard update users dashboard', async (t) => {
+  // create a new dashboard to update
+  // give name in body
+  const newboard = {name: 'flamingo'};
+  // give the token in query
+  const {body: b1, statusCode: sc1} = await t.context.got.post(`dashboards/create-dashboard?token=${token}`, {json: newboard});
+  // do test checks
+  t.is(sc1, 200);
+  t.assert(b1);
+  // now get again to get the id of the new dashboard
+  const {body: b2, statusCode: sc2} = await t.context.got(`dashboards/dashboards?token=${token}`);
+  // do test checks
+  t.is(sc2, 200);
+  t.assert(b2.success);
+  // save the id we want by grabbing the last item
+  const flamingoid = b2.dashboards[b2.dashboards.length - 1].id;
+  // give the correct json in the body
+  const updated = {id: flamingoid, nextId: 420};
+  // POST
+  const {body, statusCode} = await t.context.got.post(`dashboards/save-dashboard?token=${token}`, {json: updated});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body);
+  // delete the new dashboard since we dont need it
+  // give the id inside a json
+  const delID = {id: flamingoid};
+  const {body: b3, statusCode: sc3} = await t.context.got.post(`dashboards/delete-dashboard?token=${token}`, {json: delID});
+  // test checks
+  t.is(sc3, 200);
+  t.assert(b3.success);
+});
 
-//   // tomorrow
-//   const updated = {name: 'flamingo' , layout: Array ,items: }
+// update dashboard that doesnt exist
+test('POST /save-dashboard update dashboard that doesnt exist', async (t) => {
+  // give wrong id
+  const updated = {id: '63c27da117cbf02c5cd00000', nextId: 420};
+  // POST
+  const {body, statusCode} = await t.context.got.post(`dashboards/save-dashboard?token=${token}`, {json: updated});
+  // test checks
+  t.is(statusCode, 200);
+  t.is(body.message, 'The selected dashboard has not been found.');
+});
 
-//   const {body, statusCode} = await t.context.got.post(`dashboards/save-dashboard?token=${token}`, {json: updated});
-//   // this test should pass
-//   t.is(statusCode, 200);
-//   // returns just success
-//   t.assert(body.success);
+// clone dashboard
+test('POST /clone-dashboard clone users dashboard', async (t) => {
+  // give dog's id and the new name after the cloning
+  const clone = {dashboardId: '63d6dd31f115ef11946c24be', name: 'bat'};
+  // POST
+  const {body, statusCode} = await t.context.got.post(`dashboards/clone-dashboard?token=${token}`, {json: clone});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  // clean up
+  // get the id of the new dashboard
+  const {body: b2, statusCode: sc2} = await t.context.got(`dashboards/dashboards?token=${token}`);
+  // do test checks
+  t.is(sc2, 200);
+  t.assert(b2.success);
+  // save the id we want by grabbing the last item
+  const batid = b2.dashboards[b2.dashboards.length - 1].id;
+  // delete the new dashboard since we dont need it
+  // give the id inside a json
+  const batdelID = {id: batid};
+  const {body: b3, statusCode: sc3} = await t.context.got.post(`dashboards/delete-dashboard?token=${token}`, {json: batdelID});
+  // test checks
+  t.is(sc3, 200);
+  t.assert(b3.success);
+});
+// clone dashboard but give existing name
+test('POST /clone-dashboard clone dashboard but give existing name', async (t) => {
+  // give dog's id and name 
+  const clone = {dashboardId: '63d6dd31f115ef11946c24be', name: 'dog'};
+  // POST
+  const {body, statusCode} = await t.context.got.post(`dashboards/clone-dashboard?token=${token}`, {json: clone});
+  // test checks
+  t.is(statusCode, 200);
+  t.is(body.status, 409);
+});
+// clone dashboard but give existing name
+test('POST /clone-dashboard catcherr', async (t) => {
+  // give dog's id and name 
+  const clone = {dashboardId: '63d6dd31f115ef11946c24be', name: 'dog'};
+  // POST but do a typo on the body
+  const {statusCode} = await t.context.got.post(`dashboards/clone-dashboard?token=${token}`, {clone});
+  // test check
+  t.is(statusCode, 404);
+});
+
+// tomorrow
+// // check password needed
+// test('POST /check-password-needed', async (t) => {
+//   const checkPass = {user: {id: 123}, dashboardId: 456};
+//   const {statusCode,body} = await t.context.got.post(`dashboards/check-password-needed?token=${token}`, {json: checkPass});
+
 // });
