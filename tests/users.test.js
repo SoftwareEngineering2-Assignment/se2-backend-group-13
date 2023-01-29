@@ -66,26 +66,26 @@ test('POST /authenticate user with wrong password', async (t) => {
   t.is(statusCode, 200);
 });
 
-// reset password (forgot password)
-test('POST /resetpassword reset password', async (t) => {
-  // give just the username
-  const resetpass = {username: 'kotsos2000'};
-  const {body, statusCode} = await t.context.got.post('users/resetpassword', {json: resetpass});
-  // this test should pass
-  // body has this value
-  t.is(body.ok, true);
-  t.is(statusCode, 200);
-});
-
-// // reset password for no user (forgot password)
-// test('POST /resetpassword reset password for no user', async (t) => {
-//   // give wrong username
-//   const resetpass = {username: 'kotsos7'};
+// // reset password (forgot password)
+// test('POST /resetpassword reset password', async (t) => {
+//   // give just the username
+//   const resetpass = {username: 'kotsos2000'};
 //   const {body, statusCode} = await t.context.got.post('users/resetpassword', {json: resetpass});
-//   // this test should not pass
-//   t.is(body.status, 404);
+//   // this test should pass
+//   // body has this value
+//   t.is(body.ok, true);
 //   t.is(statusCode, 200);
-// });  
+// });
+
+// reset password for no user (forgot password)
+test('POST /resetpassword reset password for no user', async (t) => {
+  // give wrong username
+  const resetpass = {username: 'kotsos7'};
+  const {body, statusCode} = await t.context.got.post('users/resetpassword', {json: resetpass});
+  // this test should not pass
+  t.is(body.status, 404);
+  t.is(statusCode, 200);
+});  
 
 // change password for the first time
 test('POST /changepassword change password', async (t) => {
