@@ -77,57 +77,55 @@ test('POST /resetpassword reset password', async (t) => {
   t.is(statusCode, 200);
 });
 
-// reset password for no user (forgot password)
-test('POST /resetpassword reset password for no user', async (t) => {
-  // give wrong username
-  const resetpass = {username: 'kotsos7'};
-  const {body, statusCode} = await t.context.got.post('users/resetpassword', {json: resetpass});
-  // this test should not pass
-  t.is(body.status, 404);
-  t.is(statusCode, 200);
-});  
-
-
-
-// // change password for the first time
-// test('POST /changepassword change password', async (t) => {
-//   // we can give the existing password as the new one
-//   const changePass = {password: 'password2000'};
-//   // body has the password , query has token and username
-//   const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
-//   // sc 200
-//   t.is(statusCode, 200);
-//   // message password has changed
-//   t.is(body.message, 'Password was changed.');
-// });
-
-// // if we do it back to back it should not work because of timeout
-// test('POST /changepassword change password back to back', async (t) => {
-//   // we can give the existing password as the new one
-//   const changePass = {password: 'password2000'};
-//   // body has the password , query has token and username
-//   const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
-//   // sc 200
-//   t.is(statusCode, 200);
-//   // message password has changed
-//   t.is(body.status, 410);
-//   t.is(body.message, ' Resource Error: Reset token has expired.');
-// });
-
-// // import the jwtSign function in this file to use in the next test
-// const {jwtSign} = require('../src/utilities/authentication/helpers');
-
-// // give wrong user
-// test('POST /changepassword change password for a non existing user', async (t) => {
-//   // password doesnt matter
-//   const changePass = {password: 'password2000'};
-//   // body has the password , query has token and username
-//   // we need a token that has the correct structure but has wrong variables
-//   const dummytoken = jwtSign({id: '63bdd8ed050a9611142d0000', username: 'bot123'});
-//   const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${dummytoken}`, {json: changePass});
-//   // sc 200
-//   t.is(statusCode, 200);
-//   // message user not found
+// // reset password for no user (forgot password)
+// test('POST /resetpassword reset password for no user', async (t) => {
+//   // give wrong username
+//   const resetpass = {username: 'kotsos7'};
+//   const {body, statusCode} = await t.context.got.post('users/resetpassword', {json: resetpass});
+//   // this test should not pass
 //   t.is(body.status, 404);
-//   t.is(body.message, 'Resource Error: User not found.');
-// });
+//   t.is(statusCode, 200);
+// });  
+
+// change password for the first time
+test('POST /changepassword change password', async (t) => {
+  // we can give the existing password as the new one
+  const changePass = {password: 'password2000'};
+  // body has the password , query has token and username
+  const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
+  // sc 200
+  t.is(statusCode, 200);
+  // message password has changed
+  t.is(body.message, 'Password was changed.');
+});
+
+// if we do it back to back it should not work because of timeout
+test('POST /changepassword change password back to back', async (t) => {
+  // we can give the existing password as the new one
+  const changePass = {password: 'password2000'};
+  // body has the password , query has token and username
+  const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
+  // sc 200
+  t.is(statusCode, 200);
+  // message password has changed
+  t.is(body.status, 410);
+  t.is(body.message, ' Resource Error: Reset token has expired.');
+});
+
+// import the jwtSign function in this file to use in the next test
+const {jwtSign} = require('../src/utilities/authentication/helpers');
+
+// give wrong user
+test('POST /changepassword change password for a non existing user', async (t) => {
+  // password doesnt matter
+  const changePass = {password: 'password2000'};
+  // body has the password , query has token and username
+  // we need a token that has the correct structure but has wrong variables
+  const dummytoken = jwtSign({id: '63bdd8ed050a9611142d0000', username: 'bot123'});
+  const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${dummytoken}`, {json: changePass});
+  // sc 200
+  t.is(statusCode, 200);
+  // message user not found
+  t.is(body.status, 404);
+  t.is(body.message, 'Resource Error: User not found.');
+});
