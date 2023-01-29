@@ -10,7 +10,9 @@ const app = require('../src/index');
 const {jwtSign} = require('../src/utilities/authentication/helpers');
 // initialize my token to use in the tests
 const myid = '63bdd8ed050a9611142d34c4';
-const token = jwtSign({id: myid});
+const myname = 'kotsos2000';
+const token = jwtSign({id: myid, username: myname});
+
 
 module.exports = {
   http,
