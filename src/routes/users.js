@@ -116,7 +116,6 @@ router.post('/changepassword',
     const {password} = req.body;
     // username in the query path
     const {username} = req.decoded;
-    console.log(username);
     try {
       // find user using username
       const user = await User.findOne({username});
