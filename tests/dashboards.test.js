@@ -98,7 +98,7 @@ test('GET /dashboard get sources in a dashboard', async (t) => {
   // test passes
   t.is(statusCode, 200);
   // check to see we got the correct dashboard
-  t.deepEqual(body.sources, [ 'animal' ]);
+  t.deepEqual(body.sources, ['animal']);
 });
 
 // get sources in a non existingdashboard
