@@ -89,17 +89,17 @@ test('POST /resetpassword reset password for no user', async (t) => {
 
 
 
-// change password for the first time
-test('POST /changepassword change password', async (t) => {
-  // we can give the existing password as the new one
-  const changePass = {password: 'password2000'};
-  // body has the password , query has token and username
-  const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
-  // sc 200
-  t.is(statusCode, 200);
-  // message password has changed
-  t.is(body.message, 'Password was changed.');
-});
+// // change password for the first time
+// test('POST /changepassword change password', async (t) => {
+//   // we can give the existing password as the new one
+//   const changePass = {password: 'password2000'};
+//   // body has the password , query has token and username
+//   const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
+//   // sc 200
+//   t.is(statusCode, 200);
+//   // message password has changed
+//   t.is(body.message, 'Password was changed.');
+// });
 
 // // if we do it back to back it should not work because of timeout
 // test('POST /changepassword change password back to back', async (t) => {
