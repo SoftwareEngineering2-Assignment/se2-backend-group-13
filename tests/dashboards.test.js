@@ -57,8 +57,8 @@ test('POST /delete-dashboard delete a dashboard for user', async (t) => {
   // we need the id so we get it
   const {body: b1, statusCode: sc1} = await t.context.got(`dashboards/dashboards?token=${token}`);
   t.is(sc1, 200);
-  const delID = {id: b1.dashboards[1].id};
-  // just give the token in query
+  const delID = {id: b1.dashboards[b1.dashboards.length - 1].id};
+  // give the token in query
   const {body, statusCode} = await t.context.got.post(`dashboards/delete-dashboard?token=${token}`, {json: delID});
   // this test should pass
   t.is(statusCode, 200);
@@ -124,7 +124,6 @@ test('GET /dashboard get sources in a non existing dashboard', async (t) => {
 
 //   // tomorrow
 //   const updated = {name: 'flamingo' , layout: Array ,items: }
-
 
 //   const {body, statusCode} = await t.context.got.post(`dashboards/save-dashboard?token=${token}`, {json: updated});
 //   // this test should pass
