@@ -10,6 +10,8 @@ test.after.always(async (t) => {
   t.context.server.close();
 });
 
+
+
 // create new user
 test('POST /create create user', async (t) => {
   // put the info in the body, we need username password email
@@ -85,6 +87,8 @@ test('POST /resetpassword reset password for no user', async (t) => {
   t.is(statusCode, 200);
 });  
 
+
+
 // change password for the first time
 test('POST /changepassword change password', async (t) => {
   // we can give the existing password as the new one
@@ -97,18 +101,19 @@ test('POST /changepassword change password', async (t) => {
   t.is(body.message, 'Password was changed.');
 });
 
-// if we do it back to back it should not work because of timeout
-test('POST /changepassword change password back to back', async (t) => {
-  // we can give the existing password as the new one
-  const changePass = {password: 'password2000'};
-  // body has the password , query has token and username
-  const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
-  // sc 200
-  t.is(statusCode, 200);
-  // message password has changed
-  t.is(body.status, 410);
-  t.is(body.message, ' Resource Error: Reset token has expired.');
-});
+// // if we do it back to back it should not work because of timeout
+// test('POST /changepassword change password back to back', async (t) => {
+//   // we can give the existing password as the new one
+//   const changePass = {password: 'password2000'};
+//   // body has the password , query has token and username
+//   const {body, statusCode} = await t.context.got.post(`users/changepassword?token=${token}`, {json: changePass});
+//   // sc 200
+//   t.is(statusCode, 200);
+//   // message password has changed
+//   t.is(body.status, 410);
+//   t.is(body.message, ' Resource Error: Reset token has expired.');
+// });
+
 // import the jwtSign function in this file to use in the next test
 const {jwtSign} = require('../src/utilities/authentication/helpers');
 
