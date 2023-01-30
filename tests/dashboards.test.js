@@ -232,7 +232,7 @@ test('POST /check-password-needed for dashboard with password', async (t) => {
   // create a json with dashboardId and user with user.id
   // we will get dashboard "rhino" , it has a password
   // but since the owner did the query it will work
-  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d807eb8269f023449c19dd'};
+  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d848a9b6903511d0076389'};
   // query , no token needed
   const {statusCode, body} = await t.context.got.post('dashboards/check-password-needed', {json: checkPass});
   // test checks
@@ -296,7 +296,7 @@ test('POST /check-password for dashboard with password', async (t) => {
   // create a json with dashboardId and password
   // we will get dashboard "rhino" , it has a password
   // but since the owner did the query it will work
-  const comparePass = {password: 'password', dashboardId: '63d807eb8269f023449c19dd'};
+  const comparePass = {password: 'password', dashboardId: '63d848a9b6903511d0076389'};
   // query , no token needed
   const {statusCode, body} = await t.context.got.post('dashboards/check-password', {json: comparePass});
   // test checks
@@ -320,7 +320,7 @@ test('POST /check-password for dashboard with wrong id', async (t) => {
 // check password but wrong password
 test('POST /check-password for dashboard with wrong password', async (t) => {
   // create a json with dashboardId and password and give wrong id
-  const comparePass = {password: 'notpassword', dashboardId: '63d807eb8269f023449c19dd'};
+  const comparePass = {password: 'notpassword', dashboardId: '63d848a9b6903511d0076389'};
   // query , no token needed
   const {statusCode, body} = await t.context.got.post('dashboards/check-password', {json: comparePass});
   // test checks
@@ -355,7 +355,7 @@ test('POST /share-dashboard but wrong id', async (t) => {
 test('POST /change-password change password for dashboard', async (t) => {
   // create a json with dashboardId and new password
   // i chose rhino since its mine and it has a password
-  const sharedash = {dashboardId: '63d807eb8269f023449c19dd', password: 'password'};
+  const sharedash = {dashboardId: '63d848a9b6903511d0076389', password: 'password'};
   // query with token and body
   const {statusCode, body} = await t.context.got.post(`dashboards/change-password?token=${token}`, {json: sharedash});
   // test checks
