@@ -8,7 +8,6 @@ test.before(async (t) => {
 // after we are finished we close the server
 test.after.always(async (t) => {
   t.context.server.close();
-  for (let i = 0; i < 100000000; i++) { }  
 });
 
 // passing test
