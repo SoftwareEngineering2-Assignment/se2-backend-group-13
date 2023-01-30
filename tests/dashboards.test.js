@@ -379,7 +379,7 @@ test('POST /change-password with no token', async (t) => {
   // same as before
   const sharedash = {dashboardId: '63d807eb8269f02340000000', password: 'password'};
   // query without token
-  const {statusCode} = await t.context.got.post(`dashboards/change-password`, {json: sharedash});
+  const {statusCode} = await t.context.got.post('dashboards/change-password', {json: sharedash});
   // test check
   t.is(statusCode, 403);
 });

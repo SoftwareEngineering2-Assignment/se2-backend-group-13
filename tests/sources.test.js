@@ -164,8 +164,8 @@ test('DELETE /delete-source delete the last 2 sources ', async (t) => {
   t.assert(b2.success);
   t.assert(b3.success);
 });
-// these tests are not included in a seperate file users.test.js because the commit will cause ci to fail
-/*
+// these tests are not included in a seperate file 
+// users.test.js because the commit will cause ci to fail
 
 // ###### NOTE FOR THESE TESTS:
 // ###### since theres no delete user function,
@@ -294,5 +294,3 @@ test('POST /changepassword change password for a non existing user', async (t) =
   t.is(body.status, 404);
   t.is(body.message, 'Resource Error: User not found.');
 });
-
- */

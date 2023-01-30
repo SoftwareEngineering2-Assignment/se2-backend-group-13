@@ -1,4 +1,4 @@
-const {http, test, got, listen, app, token} = require('./testimports');
+const {http, test, got, listen, app} = require('./testimports');
 // before each , opens the server
 test.before(async (t) => {
   t.context.server = http.createServer(app);
