@@ -202,10 +202,184 @@ test('POST /clone-dashboard catcherr', async (t) => {
   t.is(statusCode, 404);
 });
 
-// tomorrow
-// // check password needed
-// test('POST /check-password-needed', async (t) => {
-//   const checkPass = {user: {id: 123}, dashboardId: 456};
-//   const {statusCode,body} = await t.context.got.post(`dashboards/check-password-needed?token=${token}`, {json: checkPass});
+// check password needed for wrong dashboard
+test('POST /check-password-needed for wrong dashboard', async (t) => {
+  // create the json correctly but give wrong dashboardId
+  const checkPass = {user: {id: '63bdd8ed050a9611142d3000'}, dashboardId: '63d6dd31f115ef11946c2000'};
+  // do the query
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password-needed', {json: checkPass});
+  // test checks
+  t.is(statusCode, 200);
+  t.is(body.status, 409);
+  t.is(body.message, 'The specified dashboard has not been found.');
+});
 
-// });
+// check password needed for dashboard with no password
+test('POST /check-password-needed for dashboard without password', async (t) => {
+  // create a json with dashboardId and user with user.id
+  // we will get dashboard "dog" , it has no password
+  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d6dd31f115ef11946c24be'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password-needed', {json: checkPass});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  t.is(body.owner, 'self');
+});
+
+// check password needed for dashboard with password
+test('POST /check-password-needed for dashboard with password', async (t) => {
+  // create a json with dashboardId and user with user.id
+  // we will get dashboard "rhino" , it has a password
+  // but since the owner did the query it will work
+  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d807eb8269f023449c19dd'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password-needed', {json: checkPass});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  t.is(body.owner, 'self');
+});
+
+// check password needed for another users dashboard 
+test('POST /check-password-needed for another users dashboard ', async (t) => {
+  // create a json with dashboardId and user with user.id
+  // we will get dashboard "chimp" which doesnt have a password
+  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d80c9b858f502b248e3553'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password-needed', {json: checkPass});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  t.assert(body.shared);
+});
+
+// check password needed for another users dashboard that has password
+test('POST /check-password-needed for another users dashboard with password ', async (t) => {
+  // create a json with dashboardId and user with user.id
+  // we will get dashboard "monkey" which has a password
+  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d80ca4858f502b248e355c'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password-needed', {json: checkPass});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  t.assert(body.passwordNeeded);
+});
+
+// check password needed for another users dashboard that isnt shared
+test('POST /check-password-needed for another users dashboard that isnt shared', async (t) => {
+  // create a json with dashboardId and user with user.id
+  // we will get dashboard "spider" that isnt shared
+  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d80e215fa7af325cc9361e'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password-needed', {json: checkPass});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  // since its not shared we assert !
+  t.assert(!body.shared);
+});
+
+// check password catcherr
+test('POST /check-password-needed catcherr', async (t) => {
+  // create a json with dashboardId and user with user.id
+  const checkPass = {user: {id: '63bdd8ed050a9611142d34c4'}, dashboardId: '63d80e215fa7af325cc9361e'};
+  // query but dont include {json:}
+  const {statusCode} = await t.context.got.post('dashboards/check-password-needed', {checkPass});
+  // test check
+  t.is(statusCode, 404);
+});
+
+// check password get dashboard with password
+test('POST /check-password for dashboard with password', async (t) => {
+  // create a json with dashboardId and password
+  // we will get dashboard "rhino" , it has a password
+  // but since the owner did the query it will work
+  const comparePass = {password: 'password', dashboardId: '63d807eb8269f023449c19dd'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password', {json: comparePass});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  t.assert(body.correctPassword);
+});
+
+// check password but wrong id
+test('POST /check-password for dashboard with wrong id', async (t) => {
+  // create a json with dashboardId and password and give wrong id
+  const comparePass = {password: 'password', dashboardId: '63d807eb8269f02344900000'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password', {json: comparePass});
+  // test checks
+  t.is(statusCode, 200);
+  t.is(body.status, 409);
+  t.is(body.message, 'The specified dashboard has not been found.');
+});
+
+// check password but wrong password
+test('POST /check-password for dashboard with wrong password', async (t) => {
+  // create a json with dashboardId and password and give wrong id
+  const comparePass = {password: 'notpassword', dashboardId: '63d807eb8269f023449c19dd'};
+  // query , no token needed
+  const {statusCode, body} = await t.context.got.post('dashboards/check-password', {json: comparePass});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+  t.assert(!body.correctPassword);
+});
+
+// share dashboard
+test('POST /share-dashboard', async (t) => {
+  // create a json with dashboardId , i chose 'dog'
+  const sharedash = {dashboardId: '63d6dd31f115ef11946c24be'};
+  // query with token and body
+  const {statusCode, body} = await t.context.got.post(`dashboards/share-dashboard?token=${token}`, {json: sharedash});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+});
+
+// share dashboard but wrong id
+test('POST /share-dashboard but wrong id', async (t) => {
+  // create a json with dashboardId but give wrong dashboardId
+  const sharedash = {dashboardId: '63d6dd31f115ef1194000000'};
+  // query with token and body
+  const {statusCode, body} = await t.context.got.post(`dashboards/share-dashboard?token=${token}`, {json: sharedash});
+  // test checks
+  t.is(statusCode, 200);
+  t.is(body.status, 409);
+});
+
+// change password for dashboard
+test('POST /change-password change password for dashboard', async (t) => {
+  // create a json with dashboardId and new password
+  // i chose rhino since its mine and it has a password
+  const sharedash = {dashboardId: '63d807eb8269f023449c19dd', password: 'password'};
+  // query with token and body
+  const {statusCode, body} = await t.context.got.post(`dashboards/change-password?token=${token}`, {json: sharedash});
+  // test checks
+  t.is(statusCode, 200);
+  t.assert(body.success);
+});
+
+// change password for dashboard with wrong id
+test('POST /change-password change password for dashboard with wrong id', async (t) => {
+  // create a json with dashboardId and new password and give wrong id
+  const sharedash = {dashboardId: '63d807eb8269f02340000000', password: 'password'};
+  // query with token and body
+  const {statusCode, body} = await t.context.got.post(`dashboards/change-password?token=${token}`, {json: sharedash});
+  // test checks
+  t.is(statusCode, 200);
+  t.is(body.status, 409);
+});
+
+// create test with no token for authorization file testing
+test('POST /change-password with no token', async (t) => {
+  // same as before
+  const sharedash = {dashboardId: '63d807eb8269f02340000000', password: 'password'};
+  // query without token
+  const {statusCode} = await t.context.got.post(`dashboards/change-password`, {json: sharedash});
+  // test check
+  t.is(statusCode, 403);
+});

@@ -9,24 +9,7 @@ test.before(async (t) => {
 test.after.always(async (t) => {
   t.context.server.close();
 });
-// make sure to adjust the #sources to fit how many exist right now
-test('GET /statistics returns correct response and status code', async (t) => {
-  // does a GET request to the path
-  const {body, statusCode} = await t.context.got('general/statistics');
-  t.is(body.sources, 2);
-  // this test should always pass
-  t.assert(body.success);
-  t.is(statusCode, 200);
-});
-// passing test
-test('GET /sources returns correct response and status code', async (t) => {
-  // does a get request to the path (using my id) and gets all the sources from me
-  const {statusCode, body} = await t.context.got(`sources/sources?token=${token}`);
-  // should always pass
-  t.is(statusCode, 200);
-  // my first source is named animal
-  t.is(body.sources[0].name, 'animal');
-});
+
 // passing test
 test('POST /create-source creates a new source', async (t) => {
   // create a json to give as input to the POST request

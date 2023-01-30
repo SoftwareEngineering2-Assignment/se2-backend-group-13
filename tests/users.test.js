@@ -10,6 +10,16 @@ test.after.always(async (t) => {
   t.context.server.close();
 });
 
+// ###### NOTE FOR THESE TESTS:
+// ###### since theres no delete user function,
+// ###### after the tests end we need to remove the new user
+// ###### with username testuser6 from the database
+// ###### because the first test is the create user test
+// ###### and if the user is already in the database 
+// ###### it will fail.use the mongodburi to connect to 
+// ###### compass of the vscode extention,head to group_13
+// ###### /users and he should be at the bottom
+
 // create new user
 test('POST /create create user', async (t) => {
   // put the info in the body, we need username password email
