@@ -20,6 +20,9 @@ test.after.always(async (t) => {
 // ###### compass of the vscode extention,head to group_13
 // ###### /users and he should be at the bottom
 
+// dont include these in the commit because it will cause ci to fail
+/*
+
 // create new user
 test('POST /create create user', async (t) => {
   // put the info in the body, we need username password email
@@ -73,9 +76,6 @@ test('POST /authenticate user with wrong password', async (t) => {
   t.is(body.status, 401);
   t.is(statusCode, 200);
 });
-
-// dont include these in the commit because it will cause ci to fail
-/*
 
 // reset password (forgot password)
 test('POST /resetpassword reset password', async (t) => {
