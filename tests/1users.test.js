@@ -6,7 +6,7 @@ test.before(async (t) => {
   t.context.got = got.extend({http2: true, throwHttpErrors: false, responseType: 'json', prefixUrl: t.context.prefixUrl});
 });
 // after we are finished we close the server
-test.after(async (t) => {
+test.after.always(async (t) => {
   t.context.server.close();
 });
 // ###### NOTE FOR THESE TESTS:
