@@ -1,3 +1,6 @@
+// dont include these in the commit because it will cause ci to fail
+/*
+
 const {http, test, got, listen, app, token} = require('./testimports');
 // before each , opens the server
 test.before(async (t) => {
@@ -20,8 +23,7 @@ test.after.always(async (t) => {
 // ###### compass of the vscode extention,head to group_13
 // ###### /users and he should be at the bottom
 
-// dont include these in the commit because it will cause ci to fail
-/*
+
 
 // create new user
 test('POST /create create user', async (t) => {
