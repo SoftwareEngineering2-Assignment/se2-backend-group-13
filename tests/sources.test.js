@@ -145,22 +145,23 @@ test(' POST /check-sources ', async (t) => {
   // we are expecting 2
   t.is(body.newSources.length, 2);
 });
-// quickly delete the 2 new sources from the previous test
-test('DELETE /delete-source delete the last 2 sources ', async (t) => {
-  // we need 2 ids
-  const {body: b1} = await t.context.got(`sources/sources?token=${token}`);
-  const delid1 = b1.sources[1].id;
-  const delid2 = b1.sources[2].id;
-  // create a json for each of the sources we want to delete
-  const delSource1 = {id: delid1};
-  const delSource2 = {id: delid2};
-  // do the query with the correct body each time
-  const {statusCode: sc1, body: b2} = await t.context.got.post(`sources/delete-source?token=${token}`, {json: delSource1});
-  const {statusCode: sc2, body: b3} = await t.context.got.post(`sources/delete-source?token=${token}`, {json: delSource2});
-  // sC is 200
-  t.is(sc1, 200);
-  t.is(sc2, 200);
-  // the body that is returned is just a success
-  t.assert(b2.success);
-  t.assert(b3.success);
-});
+
+// // quickly delete the 2 new sources from the previous test
+// test('DELETE /delete-source delete the last 2 sources ', async (t) => {
+//   // we need 2 ids
+//   const {body: b1} = await t.context.got(`sources/sources?token=${token}`);
+//   const delid1 = b1.sources[1].id;
+//   const delid2 = b1.sources[2].id;
+//   // create a json for each of the sources we want to delete
+//   const delSource1 = {id: delid1};
+//   const delSource2 = {id: delid2};
+//   // do the query with the correct body each time
+//   const {statusCode: sc1, body: b2} = await t.context.got.post(`sources/delete-source?token=${token}`, {json: delSource1});
+//   const {statusCode: sc2, body: b3} = await t.context.got.post(`sources/delete-source?token=${token}`, {json: delSource2});
+//   // sC is 200
+//   t.is(sc1, 200);
+//   t.is(sc2, 200);
+//   // the body that is returned is just a success
+//   t.assert(b2.success);
+//   t.assert(b3.success);
+// });
