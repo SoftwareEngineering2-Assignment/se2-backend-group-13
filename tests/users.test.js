@@ -1,13 +1,15 @@
+const {http, test, got, listen, app, token} = require('./testimports');
+
 // dont include these in the commit because it will cause ci to fail
 /*
 
-const {http, test, got, listen, app, token} = require('./testimports');
 // before each , opens the server
 test.before(async (t) => {
   t.context.server = http.createServer(app);
   t.context.prefixUrl = await listen(t.context.server);
   t.context.got = got.extend({http2: true, throwHttpErrors: false, responseType: 'json', prefixUrl: t.context.prefixUrl});
 });
+
 // after we are finished we close the server
 test.after.always(async (t) => {
   t.context.server.close();
@@ -22,8 +24,6 @@ test.after.always(async (t) => {
 // ###### it will fail.use the mongodburi to connect to 
 // ###### compass of the vscode extention,head to group_13
 // ###### /users and he should be at the bottom
-
-
 
 // create new user
 test('POST /create create user', async (t) => {
