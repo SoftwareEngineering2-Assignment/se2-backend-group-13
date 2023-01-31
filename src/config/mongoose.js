@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+// set these variables to export after
 const mongooseOptions = {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -9,6 +9,7 @@ const mongooseOptions = {
   keepAlive: true,
   keepAliveInitialDelay: 300000
 };
+// read .env to export variable
 const mongodbUri = process.env.MONGODB_URI;
   
 module.exports = () => {

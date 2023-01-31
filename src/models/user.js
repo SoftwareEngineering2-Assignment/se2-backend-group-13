@@ -5,22 +5,25 @@ const {passwordDigest, comparePassword} = require('../utilities/authentication/h
 const {constants: {min}} = require('../utilities/validation');
 
 mongoose.pluralize(null);
-
+// user model
 const UserSchema = new mongoose.Schema(
-  {
+  { // user has email,username,password and registration date
     email: {
+      // email is a required string and needs to be unique.its also in lowercase
       index: true,
       type: String,
       unique: 'A user already exists with that email!',
       required: [true, 'User email is required'],
       lowercase: true
     },
+    // username is a required string that also needs to be unique
     username: {
       index: true,
       type: String,
       unique: 'A user already exists with that username!',
       required: [true, 'Username is required'],
     },
+    // password is a required string with minlength equal to 5
     password: {
       type: String,
       required: [true, 'User password is required'],

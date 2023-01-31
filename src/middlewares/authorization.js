@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const {path, ifElse, isNil, startsWith, slice, identity, pipe} = require('ramda');
-
+// read .env to get server secret
 const secret = process.env.SERVER_SECRET;
 
 module.exports = (req, res, next) => {

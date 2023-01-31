@@ -1,5 +1,3 @@
 const mailer = require('./mailer');
-
-module.exports = {
-  mailer
-};
+// mailer for password related emails
+module.exports = {mailer};

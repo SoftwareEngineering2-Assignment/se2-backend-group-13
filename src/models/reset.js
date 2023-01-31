@@ -2,8 +2,9 @@
 const mongoose = require('mongoose');
 const beautifyUnique = require('mongoose-beautiful-unique-validation');
 const {constants: {expires}} = require('../utilities/validation');
-
+// reset model
 const ResetSchema = new mongoose.Schema({
+  // username is required and a unique token corresponds to it
   username: {
     index: true,
     type: String,
@@ -11,6 +12,7 @@ const ResetSchema = new mongoose.Schema({
     unique: 'A token already exists for that username!',
     lowercase: true
   },
+  // token required
   token: {
     type: String,
     required: true
@@ -18,6 +20,7 @@ const ResetSchema = new mongoose.Schema({
   expireAt: {
     type: Date,
     default: Date.now,
+    // 12 hours
     index: {expires},
   },
 });
