@@ -693,13 +693,7 @@ test('POST /authenticate user with wrong password', async (t) => {
    * import module user from src folderc */
    
   // mongoose findOneAndDelete function needs username as input and deletes user
-  await User.findOneAndDelete({username: 'testuser6'}, (error, deletedUser) => {
-    console.log(`Deleting user ${deletedUser}`);
-    if (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
-  });
+  await User.findOneAndDelete({username: 'testuser6'});
 });
 
 /* 
