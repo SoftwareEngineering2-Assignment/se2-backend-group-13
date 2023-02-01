@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable max-len */
 /* eslint-disable import/no-unresolved */
 require('dotenv').config();
@@ -9,6 +10,7 @@ const got = require('got');
 const listen = require('test-listen');
 const app = require('../src/index');
 const {jwtSign} = require('../src/utilities/authentication/helpers');
+const User = require('../src/models/user');
 // initialize my token to use in the tests
 const myid = '63bdd8ed050a9611142d34c4';
 const myname = 'kotsos2000';
@@ -688,16 +690,14 @@ test('POST /authenticate user with wrong password', async (t) => {
   /* now that the tests are over we delete the new user
    * because when we try and rerun the tests the first will fail since its
    * trying to create the same user with username testuser6
-   * import module user from src folder
-   */
-  const User = require('../src/models/user');
+   * import module user from src folderc */
+   
   // mongoose findOneAndDelete function needs username as input and deletes user
   await User.findOneAndDelete({username: 'testuser6'}, (error, deletedUser) => {
+    console.log(`Deleting user ${deletedUser}`);
     if (error) {
       // eslint-disable-next-line no-console
       console.error(error);
-    } else {
-
     }
   });
 });
