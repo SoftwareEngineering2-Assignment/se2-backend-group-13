@@ -2,7 +2,6 @@
 const {isNil} = require('ramda');
 
 const yup = require('yup');
-const {min} = require('./constants');
 // give functions to email
 const email = yup
   .string()
@@ -17,7 +16,7 @@ const username = yup
 const password = yup
   .string()
   .trim()
-  .min(min);
+  .min(5);
 // initialize request
 const request = yup.object().shape({username: username.required()});
 // initialize authenticate to require username and password

@@ -1,7 +1,6 @@
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
 const beautifyUnique = require('mongoose-beautiful-unique-validation');
-const {constants: {expires}} = require('../utilities/validation');
 // reset model
 const ResetSchema = new mongoose.Schema({
   // username is required and a unique token corresponds to it
@@ -21,7 +20,7 @@ const ResetSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     // 12 hours
-    index: {expires},
+    index: '12h',
   },
 });
 
