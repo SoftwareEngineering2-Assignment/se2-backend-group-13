@@ -10,6 +10,7 @@ const got = require('got');
 const listen = require('test-listen');
 const app = require('../src/index');
 const {jwtSign} = require('../src/utilities/authentication/helpers');
+const User = require('../src/models/user');
 // initialize my token to use in the tests
 const myid = '63bdd8ed050a9611142d34c4';
 const myname = 'kotsos2000';
@@ -685,7 +686,14 @@ test('POST /authenticate user with wrong password', async (t) => {
   // this test should  pass
   // with body status 401
   t.is(body.status, 401);
-  t.is(statusCode, 200); 
+  t.is(statusCode, 200);
+  /* now that the tests are over we delete the new user
+   * because when we try and rerun the tests the first will fail since its
+   * trying to create the same user with username testuser6
+   * import module user from src folderc */
+   
+  // mongoose findOneAndDelete function needs username as input and deletes user
+  await User.findOneAndDelete({username: 'testuser6'});
 });
 
 /* 
