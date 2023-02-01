@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 const beautifyUnique = require('mongoose-beautiful-unique-validation');
 const {passwordDigest, comparePassword} = require('../utilities/authentication/helpers');
+const {constants: {min}} = require('../utilities/validation');
 
 mongoose.pluralize(null);
 // user model
@@ -27,7 +28,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, 'User password is required'],
       select: false,
-      minlength: 5
+      minlength: min
     },
     registrationDate: {type: Number}
   }
