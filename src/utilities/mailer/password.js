@@ -1,13 +1,14 @@
 // get the url and logo from .env
 const baseUrl = process.env.PLATFORM_URI;
 const logo = `${process.env.SERVER_URI}/logo.png`;
+// function that takes token as input and creates the url for password reset
 const link = (token) => `${baseUrl}/reset-password?token=${token}`;
 
 /**
  * Creates and returns an email with a password reset token. The parameters given are the
  * platform's logo and the reset token needed for chaning the password.
  */
-
+// export the function that generates the text
 module.exports = (token) => (`
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd>
     <html xmlns="http://www.w3.org/1999/xhtml" style="font-family: Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
@@ -16,7 +17,7 @@ module.exports = (token) => (`
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Codin Platform</title>
         <style>
-          body { 
+          body { // style for the body
             padding: 0 !important;
             background-color: #fff;
             font-family: Helvetica,Arial,sans-serif;
@@ -29,11 +30,11 @@ module.exports = (token) => (`
             line-height: 1.6em; 
             overflow-y: auto;
           }
-          table {
+          table { // style for the table
             width: 60%;
             margin: 0 auto;
           }
-          tr {
+          tr { // probably text
             margin: 20px 0;
             color:#565a5c;
             font-size: 18px;
@@ -45,15 +46,18 @@ module.exports = (token) => (`
         <table class="body-wrap">
           <tr>
             <td style="width:100%;display:flex;">
+              {/* div for logo */}
               <img style="display:block;width:300px;margin:0 auto;" src="${logo}"/>
             </td>
           </tr>
           <tr>
             <td>
+              {/* start of message */}
               <strong>Hi,</strong>
             </td>
           </tr>
           <tr>
+            {/* prompt user to click the redirecting link */}
             <td>
               You recently requested to reset your password for your codin platform account. Click the button below
               to reset it.
@@ -70,6 +74,7 @@ module.exports = (token) => (`
             </td>
           </tr>
           <tr>
+            {/* message to warn user */}
             <td>
               If you did not request a password reset, please ignore this email or reply to let us know.
             </td>
