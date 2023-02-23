@@ -696,9 +696,6 @@ test('POST /authenticate user with wrong password', async (t) => {
   await User.findOneAndDelete({username: 'testuser6'});
 });
 
-/* 
- *dont include those that send emails because the api is not working
-
 // reset password (forgot password)
 test('POST /resetpassword reset password', async (t) => {
   // give just the username
@@ -709,8 +706,6 @@ test('POST /resetpassword reset password', async (t) => {
   t.is(body.ok, true);
   t.is(statusCode, 200);
 });
-
-*/
     
 // reset password for non existing user (forgot password)
 test('POST /resetpassword reset password for no user', async (t) => {
